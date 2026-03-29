@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		7168A9072F798B44008AAEE9 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		717B871D2F79794400442698 /* GitHubBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -34,6 +35,7 @@
 			children = (
 				717B871F2F79794400442698 /* GitHubBrowser */,
 				717B871E2F79794400442698 /* Products */,
+				7168A9072F798B44008AAEE9 /* CLAUDE.md */,
 			);
 			sourceTree = "<group>";
 		};

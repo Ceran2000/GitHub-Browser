@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  GitHubBrowser
-//
-//  Created by Mateusz Ceranka on 29/03/2026.
-//
-
 import SwiftUI
 
 struct ContentView: View {
