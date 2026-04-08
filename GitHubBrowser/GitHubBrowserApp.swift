@@ -2,9 +2,11 @@ import SwiftUI
 
 @main
 struct GitHubBrowserApp: App {
+    private let dependencies = AppDependencies()
+    
     var body: some Scene {
         WindowGroup {
-            RepositorySearchScreen(viewModel: RepositorySearchViewModel(apiClient: GitHubAPIClient()))
+            RepositorySearchScreen(viewModel: dependencies.makeRepositorySearchViewModel())
         }
     }
 }
