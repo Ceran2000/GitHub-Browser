@@ -10,18 +10,21 @@ struct RepositorySearchScreen: View {
                     .onChange(of: viewModel.searchQuery) { _, query in viewModel.queryChanged(to: query) }
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
-
-                if let error = viewModel.error {
+                
+                switch viewModel.state {
+                case .initial:
+                    EmptyStateView(icon: "magnifyingglass", message: "Wpisz nazwę repozytorium, żeby wyszukać")
+                case .loading:
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                case .empty:
+                    EmptyStateView(icon: "tray", message: "Brak wyników dla \"\(viewModel.searchQuery)\"")
+                case .results(let repositories):
+                    List(repositories) { repo in
+                        RepositoryRowView(repository: repo)
+                    }
+                case .error(let error):
                     ErrorView(message: error.localizedDescription)
-                } else {
-                    List(viewModel.repositories) { repo in
-                        Text(repo.fullName)
-                    }
-                    .overlay {
-                        if viewModel.isLoading {
-                            ProgressView()
-                        }
-                    }
                 }
             }
             .navigationTitle("GitHubBrowser")

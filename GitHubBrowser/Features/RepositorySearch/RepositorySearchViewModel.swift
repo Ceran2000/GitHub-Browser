@@ -5,13 +5,17 @@ import Foundation
 final class RepositorySearchViewModel: ObservableObject {
     private let apiClient: NetworkServiceProtocol
     
-    @Published private(set) var repositories: [Repository] = []
+    @Published var state: RepositoryListState = .initial
     
     @Published var searchQuery: String = ""
     private var searchTask: Task<Void, Never>?
     
     func queryChanged(to query: String) {
         searchTask?.cancel()
+        guard !query.isEmpty else {
+            state = .initial
+            return
+        }
         searchTask = Task {
             try? await Task.sleep(for: .milliseconds(500))
             guard !Task.isCancelled else { return }
@@ -19,31 +23,32 @@ final class RepositorySearchViewModel: ObservableObject {
         }
     }
     
-    
-    @Published private(set) var isLoading = false
-    @Published private(set) var error: NetworkError?
-    
     init(apiClient: NetworkServiceProtocol) {
         self.apiClient = apiClient
     }
     
     func search(query: String) async {
-        guard !query.isEmpty else { return }
-        isLoading = true
-        error = nil
+        guard !query.isEmpty else {
+            state = .initial
+            return
+        }
+        state = .loading
         
         do {
             let response = try await apiClient.fetch(
                 RepositorySearchResponseDTO.self,
                 endpoint: .searchRepositories(query: query, page: 1)
             )
-            repositories = response.items.map { $0.toDomain() }
+            let results = response.items.map { $0.toDomain() }
+            if !results.isEmpty {
+                state = .results(results)
+            } else {
+                state = .empty
+            }
         } catch let networkError as NetworkError {
-            self.error = networkError
+            state = .error(networkError)
         } catch {
-            self.error = .requestFailed(statusCode: 0)
+            state = .error(.requestFailed(statusCode: 0))
         }
-        
-        isLoading = false
     }
 }
