@@ -21,7 +21,12 @@ struct RepositorySearchScreen: View {
                     EmptyStateView(icon: "tray", message: "Brak wyników dla \"\(viewModel.searchQuery)\"")
                 case .results(let repositories):
                     List(repositories) { repo in
-                        RepositoryRowView(repository: repo)
+                        NavigationLink(value: repo) {
+                            RepositoryRowView(repository: repo)
+                        }
+                    }
+                    .navigationDestination(for: Repository.self) { repo in
+                        RepositoryDetailsScreen(viewModel: RepositoryDetailViewModel(repository: repo))
                     }
                 case .error(let error):
                     ErrorView(message: error.localizedDescription)
