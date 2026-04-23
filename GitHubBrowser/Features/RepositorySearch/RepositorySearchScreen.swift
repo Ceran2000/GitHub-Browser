@@ -5,12 +5,7 @@ struct RepositorySearchScreen: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                TextField("Szukaj repozytoriów...", text: $viewModel.searchQuery)
-                    .onChange(of: viewModel.searchQuery) { _, query in viewModel.queryChanged(to: query) }
-                    .textFieldStyle(.roundedBorder)
-                    .padding(.horizontal)
-                
+            Group {
                 switch viewModel.state {
                 case .initial:
                     EmptyStateView(icon: "magnifyingglass", message: "Wpisz nazwę repozytorium, żeby wyszukać")
@@ -33,6 +28,12 @@ struct RepositorySearchScreen: View {
                 }
             }
             .navigationTitle("GitHubBrowser")
+            .searchable(
+                text: $viewModel.searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Szukaj repozytoriów..."
+            )
+            .onChange(of: viewModel.searchQuery) { _, query in viewModel.queryChanged(to: query) }
         }
     }
 }

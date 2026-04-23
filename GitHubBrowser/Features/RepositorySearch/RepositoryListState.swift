@@ -1,4 +1,3 @@
-
 enum RepositoryListState {
     case initial
     case loading
