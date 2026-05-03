@@ -6,7 +6,7 @@ struct GitHubBrowserApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RepositorySearchScreen(viewModel: dependencies.makeRepositorySearchViewModel())
+            RepositorySearchScreen(viewModel: dependencies.makeRepositorySearchViewModel(), makeDetailViewModel: dependencies.makeRepositoryDetailViewModel(for:))
         }
     }
 }

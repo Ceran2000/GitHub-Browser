@@ -3,10 +3,19 @@ import Foundation
 
 final class RepositoryDetailViewModel: ObservableObject {
     let repository: Repository
+    private let storage: StorageProtocol
     
-    init (repository: Repository) {
-        self.repository = repository
+    @Published var isFavorite: Bool = false
+    
+    func toggleFavorite() {
+        if isFavorite {
+            storage.removeRepository(withId: repository.id)
+        } else {
+            storage.saveRepository(repository)
+        }
+        isFavorite.toggle()
     }
+
     
     var formattedStars: String { repository.stargazersCount.formatted() }
     var formattedForks: String { repository.forksCount.formatted() }
@@ -18,5 +27,11 @@ final class RepositoryDetailViewModel: ObservableObject {
                                     
     var repositoryUrl: URL? {
         URL(string: repository.htmlUrl)
+    }
+    
+    init (repository: Repository, storage: StorageProtocol) {
+        self.repository = repository
+        self.storage = storage
+        self.isFavorite = storage.isRepositoryFavorite(id: repository.id)
     }
 }

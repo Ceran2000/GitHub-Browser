@@ -34,6 +34,13 @@ struct RepositoryDetailsScreen: View {
         }
         .navigationTitle(viewModel.repository.name)
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { viewModel.toggleFavorite() }) {
+                    Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                }
+            }
+        }
     }
 }
 

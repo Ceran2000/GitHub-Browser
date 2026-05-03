@@ -1,6 +1,6 @@
 import Foundation
 
-struct Repository: Identifiable, Hashable {
+struct Repository: Identifiable, Hashable, Codable {
     let id: Int
     let name: String
     let fullName: String

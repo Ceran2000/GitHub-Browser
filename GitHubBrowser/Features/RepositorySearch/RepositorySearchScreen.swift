@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RepositorySearchScreen: View {
     @ObservedObject var viewModel: RepositorySearchViewModel
+    let makeDetailViewModel: (Repository) -> RepositoryDetailViewModel
 
     var body: some View {
         NavigationStack {
@@ -21,7 +22,7 @@ struct RepositorySearchScreen: View {
                         }
                     }
                     .navigationDestination(for: Repository.self) { repo in
-                        RepositoryDetailsScreen(viewModel: RepositoryDetailViewModel(repository: repo))
+                        RepositoryDetailsScreen(viewModel: makeDetailViewModel(repo))
                     }
                 case .error(let error):
                     ErrorView(message: error.localizedDescription)
