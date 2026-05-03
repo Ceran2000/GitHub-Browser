@@ -15,4 +15,8 @@ final class AppDependencies {
     func makeRepositoryDetailViewModel(for repository: Repository) -> RepositoryDetailViewModel {
         RepositoryDetailViewModel(repository: repository, storage: storage)
     }
+    
+    func makeFavoritesViewModel() -> FavoritesViewModel {
+        FavoritesViewModel(storage: storage)
+    }
 }

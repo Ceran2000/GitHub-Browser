@@ -6,7 +6,23 @@ struct GitHubBrowserApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RepositorySearchScreen(viewModel: dependencies.makeRepositorySearchViewModel(), makeDetailViewModel: dependencies.makeRepositoryDetailViewModel(for:))
+            TabView {
+                RepositorySearchScreen(
+                    viewModel: dependencies.makeRepositorySearchViewModel(),
+                    makeDetailViewModel: dependencies.makeRepositoryDetailViewModel(for:)
+                )
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+                
+                FavoritesScreen(
+                    viewModel: dependencies.makeFavoritesViewModel(),
+                    makeDetailViewModel: dependencies.makeRepositoryDetailViewModel(for:)
+                )
+                .tabItem {
+                    Label("Favorites", systemImage: "heart")
+                }
+            }
         }
     }
 }
