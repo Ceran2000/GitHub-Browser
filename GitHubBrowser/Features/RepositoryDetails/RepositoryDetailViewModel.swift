@@ -3,17 +3,16 @@ import Foundation
 
 final class RepositoryDetailViewModel: ObservableObject {
     let repository: Repository
-    private let storage: StorageProtocol
+    private let favoritesStore: FavoritesStore
     
     @Published var isFavorite: Bool = false
     
     func toggleFavorite() {
         if isFavorite {
-            storage.removeRepository(withId: repository.id)
+            favoritesStore.remove(withId: repository.id)
         } else {
-            storage.saveRepository(repository)
+            favoritesStore.add(repository)
         }
-        isFavorite.toggle()
     }
 
     
@@ -29,9 +28,15 @@ final class RepositoryDetailViewModel: ObservableObject {
         URL(string: repository.htmlUrl)
     }
     
-    init (repository: Repository, storage: StorageProtocol) {
+    init (repository: Repository, favoritesStore: FavoritesStore) {
         self.repository = repository
-        self.storage = storage
-        self.isFavorite = storage.isRepositoryFavorite(id: repository.id)
+        self.favoritesStore = favoritesStore
+        
+        favoritesStore.$favorites
+            .map { $0.contains {
+                $0.id == repository.id
+            }
+        }
+            .assign(to: &$isFavorite)
     }
 }

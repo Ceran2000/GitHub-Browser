@@ -4,8 +4,10 @@ struct FavoritesScreen: View {
     @ObservedObject var viewModel: FavoritesViewModel
     let makeDetailViewModel:  (Repository) -> RepositoryDetailViewModel
     
+    @State private var path = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if viewModel.favorites.isEmpty {
                     EmptyStateView(icon: "heart", message: "No favorites yet")
@@ -21,7 +23,9 @@ struct FavoritesScreen: View {
                 }
             }
             .navigationTitle("Favorites")
-            .onAppear { viewModel.loadFavorites() }
+            .onChange(of: viewModel.favorites) {
+                path = NavigationPath()
+            }
         }
     }
 }
